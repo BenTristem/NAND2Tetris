@@ -1,0 +1,13 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux.hdl
+
+/**
+ * Dmultiplexor.  
+ * {a,b} = {in,0} if sel == 0
+ *         {0,in} if sel == 1
+ */
+
+
+I am leading the way by moving my HEI work under your Google Domain. This means you have ultimate control over my work email box, work calendar, and documents created for HEI should I get hit by the proverbial bus. It'll take a few weeks to transition, please start emailing me at Ben@HarvEkerInternational.com with immediate effect (and use that for all HEI work if giving to others) As a coach I have the nickname BenT@ReasonsOrResults.com.

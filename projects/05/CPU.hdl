@@ -1,0 +1,86 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * The Central Processing unit (CPU).
+ * Consists of an ALU and a set of registers, designed to fetch and 
+ * execute instructions written in the Hack machine language.
+ * In particular, the ALU executes the inputted instruction according
+ * to the Hack machine language specification, as follows. 
+ * The D and A in the language specification refer to CPU-resident registers,
+ * while M refers to the memory register addressed by A, i.e. to Memory[A].
+ * The inM input holds the value of this register. If the current instruction 
+ * needs to write a value to M, the value is placed in outM, the address 
+ * of the target register is placed in the addressM output, and the 
+ * writeM control bit is asserted. (When writeM=0, any value may 
+ * appear in outM). The outM and writeM outputs are combinational: 
+ * they are affected instantaneously by the execution of the current 
+ * instruction. The addressM and pc outputs are clocked: although they 
+ * are affected by the execution of the current instruction, they commit 
+ * to their new values only in the next time unit. If reset == 1, then the 
+ * CPU jumps to address 0 (i.e. sets pc = 0 in next time unit) rather 
+ * than to the address resulting from executing the current instruction. 
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current program
+                         // (reset == 1) or continue executing the current
+                         // program (reset == 0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write into M? 
+        addressM[15],    // RAM address (of M)
+        pc[15];          // ROM address (of next instruction)
+
+     PARTS:
+     ALU(x=DOut, y=MUX2Out, out=ALUout, zr=ALUzr, ng=ALUng,
+     	zx=instruction[11],
+        nx=instruction[10],
+        zy=instruction[9],
+        ny=instruction[8],
+        f=instruction[7],
+        no=instruction[6]
+     );
+     Or16(a=ALUout, b=false, out=outM); // Trivial output splitter
+     
+     ARegister(in=MUX1Out, load=loadA, out=AOut);
+     DRegister(in=ALUout,  load=loadD, out=DOut);
+     PC(in=AOut, load=loadPC, inc=incPC, reset=reset, out[0..14]=pc);
+     Or16(a=AOut, b=false, out[0..14]=addressM); // Output splitter, care loose pin
+     
+     // MUX 1 and MUX 2
+     Mux16(a=instruction, b=ALUout, sel=MUX1Sel, out=MUX1Out);
+     Mux16(a=AOut, b=inM, sel=MUX2Sel, out=MUX2Out);
+    
+     
+     // My CUSTOM CONTROL LOGIC...
+     // Inputs: instruction[16], zr, ng
+     // Outputs: MUX1Sel, MUX2Sel, loadA, loadD, loadPC, incPC, writeM
+     
+     Or(a=instruction[15], b=false, out=MUX1Sel);
+     Xor(a=instruction[15], b=true, out=loadA1); // Load when MSB=0
+     Or(a=loadA1, b=loadA2, out=loadA);
+     Or(a=instruction[12], b=false, out=MUX2Sel);
+
+	 // Jump logic...
+	 Or(a=ALUzr, b=ALUng, out=jOr1);
+	 Not(in=jOr1, out=notOrOut);
+	 And(a=instruction[0], b=notOrOut, out=jAnd3);
+	 And(a=instruction[1], b=ALUzr, out=jAnd2);
+	 And(a=instruction[2], b=ALUng, out=jAnd1);
+	 Or(a=jAnd1, b=jAnd2, out=jOr2);
+	 Or(a=jOr2, b=jAnd3, out=preLoad);
+	 And(a=instruction[15], b=preLoad, out=loadPC); // Only for C-ins
+	 
+	 Not(in=loadPC, out=incPC);
+	 
+	 // Destination logic (only for C-instructions)...
+     And(a=instruction[3], b=instruction[15], out=writeM);
+     And(a=instruction[4], b=instruction[15], out=loadD);
+     And(a=instruction[5], b=instruction[15], out=loadA2);
+}

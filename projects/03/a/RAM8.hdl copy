@@ -1,0 +1,398 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM8.hdl
+
+/**
+ * Memory of 8 registers, each 16-bit wide.  
+ * The chip facilitates read and write operations, as follows:
+ *     Read:  out(t) = RAM8[address(t)](t)
+ *     Write: If load(t-1) then RAM8[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory 
+ * location specified by address. If load == 1, the in value is loaded 
+ * into the memory location specified by address.  This value becomes 
+ * available through the out output starting from the next time step.
+ */
+
+CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+    CLOCKED load; //is it?
+
+    PARTS:
+    // Internal buffer register
+    Bit(in=in[0], load=load, out=id0);
+    Bit(in=in[1], load=load, out=id1);
+    Bit(in=in[2], load=load, out=id2);
+    Bit(in=in[3], load=load, out=id3);
+    Bit(in=in[4], load=load, out=id4);
+    Bit(in=in[5], load=load, out=id5);
+    Bit(in=in[6], load=load, out=id6);
+    Bit(in=in[7], load=load, out=id7);
+    Bit(in=in[8], load=load, out=id8);
+    Bit(in=in[9], load=load, out=id9);
+    Bit(in=in[10], load=load, out=id10);
+    Bit(in=in[11], load=load, out=id11);
+    Bit(in=in[12], load=load, out=id12);
+    Bit(in=in[13], load=load, out=id13);
+    Bit(in=in[14], load=load, out=id14);
+    Bit(in=in[15], load=load, out=id15);
+
+    // Bit 0 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[0], a=r0b0,
+        in=in[0], b=r1b0,
+        in=in[0], c=r2b0,
+        in=in[0], d=r3b0,
+        in=in[0], e=r4b0,
+        in=in[0], f=r5b0,
+        in=in[0], g=r6b0,
+        in=in[0], h=r7b0
+    );
+    
+    // Bit 1 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[1], a=r0b1,
+        in=in[1], b=r1b1,
+        in=in[1], c=r2b1,
+        in=in[1], d=r3b1,
+        in=in[1], e=r4b1,
+        in=in[1], f=r5b1,
+        in=in[1], g=r6b1,
+        in=in[1], h=r7b1
+    );
+
+    // Bit 2 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[2], a=r0b2,
+        in=in[2], b=r1b2,
+        in=in[2], c=r2b2,
+        in=in[2], d=r3b2,
+        in=in[2], e=r4b2,
+        in=in[2], f=r5b2,
+        in=in[2], g=r6b2,
+        in=in[2], h=r7b2
+    );
+
+    // Bit 3 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[3], a=r0b3,
+        in=in[3], b=r1b3,
+        in=in[3], c=r2b3,
+        in=in[3], d=r3b3,
+        in=in[3], e=r4b3,
+        in=in[3], f=r5b3,
+        in=in[3], g=r6b3,
+        in=in[3], h=r7b3
+    );
+
+    // Bit 4 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[4], a=r0b4,
+        in=in[4], b=r1b4,
+        in=in[4], c=r2b4,
+        in=in[4], d=r3b4,
+        in=in[4], e=r4b4,
+        in=in[4], f=r5b4,
+        in=in[4], g=r6b4,
+        in=in[4], h=r7b4
+    );
+
+    // Bit 5 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[5], a=r0b5,
+        in=in[5], b=r1b5,
+        in=in[5], c=r2b5,
+        in=in[5], d=r3b5,
+        in=in[5], e=r4b5,
+        in=in[5], f=r5b5,
+        in=in[5], g=r6b5,
+        in=in[5], h=r7b5
+    );
+
+    // Bit 6 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[6], a=r0b6,
+        in=in[6], b=r1b6,
+        in=in[6], c=r2b6,
+        in=in[6], d=r3b6,
+        in=in[6], e=r4b6,
+        in=in[6], f=r5b6,
+        in=in[6], g=r6b6,
+        in=in[6], h=r7b6
+    );
+
+    // Bit 7 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[7], a=r0b7,
+        in=in[7], b=r1b7,
+        in=in[7], c=r2b7,
+        in=in[7], d=r3b7,
+        in=in[7], e=r4b7,
+        in=in[7], f=r5b7,
+        in=in[7], g=r6b7,
+        in=in[7], h=r7b7
+    );
+
+    // Bit 8 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[8], a=r0b8,
+        in=in[8], b=r1b8,
+        in=in[8], c=r2b8,
+        in=in[8], d=r3b8,
+        in=in[8], e=r4b8,
+        in=in[8], f=r5b8,
+        in=in[8], g=r6b8,
+        in=in[8], h=r7b8
+    );
+
+    // Bit 9 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[9], a=r0b9,
+        in=in[9], b=r1b9,
+        in=in[9], c=r2b9,
+        in=in[9], d=r3b9,
+        in=in[9], e=r4b9,
+        in=in[9], f=r5b9,
+        in=in[9], g=r6b9,
+        in=in[9], h=r7b9
+    );
+
+    // Bit 10 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[10], a=r0b10,
+        in=in[10], b=r1b10,
+        in=in[10], c=r2b10,
+        in=in[10], d=r3b10,
+        in=in[10], e=r4b10,
+        in=in[10], f=r5b10,
+        in=in[10], g=r6b10,
+        in=in[10], h=r7b10
+    );
+
+    // Bit 11 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[11], a=r0b11,
+        in=in[11], b=r1b11,
+        in=in[11], c=r2b11,
+        in=in[11], d=r3b11,
+        in=in[11], e=r4b11,
+        in=in[11], f=r5b11,
+        in=in[11], g=r6b11,
+        in=in[11], h=r7b11
+    );
+
+    // Bit 12 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[12], a=r0b12,
+        in=in[12], b=r1b12,
+        in=in[12], c=r2b12,
+        in=in[12], d=r3b12,
+        in=in[12], e=r4b12,
+        in=in[12], f=r5b12,
+        in=in[12], g=r6b12,
+        in=in[12], h=r7b12
+    );
+
+    // Bit 13 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[13], a=r0b13,
+        in=in[13], b=r1b13,
+        in=in[13], c=r2b13,
+        in=in[13], d=r3b13,
+        in=in[13], e=r4b13,
+        in=in[13], f=r5b13,
+        in=in[13], g=r6b13,
+        in=in[13], h=r7b13
+    );
+
+    // Bit 14 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[14], a=r0b14,
+        in=in[14], b=r1b14,
+        in=in[14], c=r2b14,
+        in=in[14], d=r3b14,
+        in=in[14], e=r4b14,
+        in=in[14], f=r5b14,
+        in=in[14], g=r6b14,
+        in=in[14], h=r7b14
+    );
+
+    // Bit 15 Demultiplexer
+    DMux8Way(sel=address,
+        in=in[15], a=r0b15,
+        in=in[15], b=r1b15,
+        in=in[15], c=r2b15,
+        in=in[15], d=r3b15,
+        in=in[15], e=r4b15,
+        in=in[15], f=r5b15,
+        in=in[15], g=r6b15,
+        in=in[15], h=r7b15	
+    );
+
+
+//////////////////
+// Registers below
+    DFF(in=load, out=pl);
+
+    Register(load=pl, out=out0,
+        in[0]=r0b0,
+        in[1]=r0b1,
+        in[2]=r0b2,
+        in[3]=r0b3,
+        in[4]=r0b4,
+        in[5]=r0b5,
+        in[6]=r0b6,
+        in[7]=r0b7,
+        in[8]=r0b8,
+        in[9]=r0b9,
+        in[10]=r0b10,
+        in[11]=r0b11,
+        in[12]=r0b12,
+        in[13]=r0b13,
+        in[14]=r0b14,
+        in[15]=r0b15
+    );
+    Register(load=pl,  out=out1,
+        in[0]=r1b0,
+        in[1]=r1b1,
+        in[2]=r1b2,
+        in[3]=r1b3,
+        in[4]=r1b4,
+        in[5]=r1b5,
+        in[6]=r1b6,
+        in[7]=r1b7,
+        in[8]=r1b8,
+        in[9]=r1b9,
+        in[10]=r1b10,
+        in[11]=r1b11,
+        in[12]=r1b12,
+        in[13]=r1b13,
+        in[14]=r1b14,
+        in[15]=r1b15
+    );
+    Register(load=pl, out=out2,
+        in[0]=r2b0,
+        in[1]=r2b1,
+        in[2]=r2b2,
+        in[3]=r2b3,
+        in[4]=r2b4,
+        in[5]=r2b5,
+        in[6]=r2b6,
+        in[7]=r2b7,
+        in[8]=r2b8,
+        in[9]=r2b9,
+        in[10]=r2b10,
+        in[11]=r2b11,
+        in[12]=r2b12,
+        in[13]=r2b13,
+        in[14]=r2b14,
+        in[15]=r2b15
+    );
+    Register(load=pl, out=out3,
+        in[0]=r3b0,
+        in[1]=r3b1,
+        in[2]=r3b2,
+        in[3]=r3b3,
+        in[4]=r3b4,
+        in[5]=r3b5,
+        in[6]=r3b6,
+        in[7]=r3b7,
+        in[8]=r3b8,
+        in[9]=r3b9,
+        in[10]=r3b10,
+        in[11]=r3b11,
+        in[12]=r3b12,
+        in[13]=r3b13,
+        in[14]=r3b14,
+        in[15]=r3b15
+    );
+    Register(load=pl, out=out4,
+        in[0]=r4b0,
+        in[1]=r4b1,
+        in[2]=r4b2,
+        in[3]=r4b3,
+        in[4]=r4b4,
+        in[5]=r4b5,
+        in[6]=r4b6,
+        in[7]=r4b7,
+        in[8]=r4b8,
+        in[9]=r4b9,
+        in[10]=r4b10,
+        in[11]=r4b11,
+        in[12]=r4b12,
+        in[13]=r4b13,
+        in[14]=r4b14,
+        in[15]=r4b15
+    );
+    Register(load=pl, out=out5,
+        in[0]=r5b0,
+        in[1]=r5b1,
+        in[2]=r5b2,
+        in[3]=r5b3,
+        in[4]=r5b4,
+        in[5]=r5b5,
+        in[6]=r5b6,
+        in[7]=r5b7,
+        in[8]=r5b8,
+        in[9]=r5b9,
+        in[10]=r5b10,
+        in[11]=r5b11,
+        in[12]=r5b12,
+        in[13]=r5b13,
+        in[14]=r5b14,
+        in[15]=r5b15
+    );
+    Register(load=pl, out=out6,
+        in[0]=r6b0,
+        in[1]=r6b1,
+        in[2]=r6b2,
+        in[3]=r6b3,
+        in[4]=r6b4,
+        in[5]=r6b5,
+        in[6]=r6b6,
+        in[7]=r6b7,
+        in[8]=r6b8,
+        in[9]=r6b9,
+        in[10]=r6b10,
+        in[11]=r6b11,
+        in[12]=r6b12,
+        in[13]=r6b13,
+        in[14]=r6b14,
+        in[15]=r6b15
+    );
+    Register(load=pl, out=out7,
+        in[0]=r7b0,
+        in[1]=r7b1,
+        in[2]=r7b2,
+        in[3]=r7b3,
+        in[4]=r7b4,
+        in[5]=r7b5,
+        in[6]=r7b6,
+        in[7]=r7b7,
+        in[8]=r7b8,
+        in[9]=r7b9,
+        in[10]=r7b10,
+        in[11]=r7b11,
+        in[12]=r7b12,
+        in[13]=r7b13,
+        in[14]=r7b14,
+        in[15]=r7b15
+    );
+
+
+// Output multiplexer below
+///////////////////////////
+    Mux8Way16(
+        a=out0,
+        b=out1,
+        c=out2,
+        d=out3,
+        e=out4,
+        f=out5,
+        g=out6,
+        h=out7,
+        sel=address,
+        out=out
+    );
+}
